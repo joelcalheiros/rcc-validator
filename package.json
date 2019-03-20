@@ -18,6 +18,15 @@
     "name": "Joel Calheiros",
     "email": "joel@esolidar.com"
   },
+  "keywords": [
+    "react-component",
+    "react",
+    "creditcard",
+    "credit card",
+    "visa",
+    "mastercard",
+    "payment"
+],
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.11",
