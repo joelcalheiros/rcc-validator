@@ -50,7 +50,6 @@ class CreditCardValidator extends React.Component {
       this.onChangeCreditCardValidator();
     });
     payment.formatCardNumber(document.querySelector('[name=number]'));
-    // this.props.onChangeHolder(e.target.value);
   }
 
   onBlurCardNumber(e) {
