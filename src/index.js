@@ -51,6 +51,7 @@ class CreditCardValidator extends React.Component {
 
   onBlurCardNumber(e) {
     const cardType = payment.fns.cardType(e.target.value) ? payment.fns.cardType(e.target.value) : '';
+    cardType === 'mastercard' ? 'master' : cardType;
     const validCard = payment.fns.validateCardNumber(e.target.value);
     const { errors, brand } = this.state;
     payment.formatCardNumber(document.querySelector('[name=number]'));
