@@ -5,7 +5,7 @@
 ## Usage
 
 ```js
-import CreditCardValidator from 'react-credit-card-validator'
+import CreditCardValidator from 'rcc-validator';
 
 <CreditCardValidator
   onChangeCreditCardValidator={this.onChangeCreditCardValidator}
