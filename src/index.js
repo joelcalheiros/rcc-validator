@@ -31,8 +31,12 @@ class CreditCardValidator extends React.Component {
   }
 
   onChangeHolder(e) {
+    const { errors } = this.state;
+    const key = 'holder';
+    delete errors[key];
     this.setState({
       holder: e.target.value,
+      errors,
     }, () => {
       this.onChangeCreditCardValidator();
     });
@@ -179,6 +183,7 @@ class CreditCardValidator extends React.Component {
   render() {
     const {
       customTextLabels,
+      showCardType,
     } = this.props;
 
     const { errors } = this.state;
@@ -258,34 +263,32 @@ class CreditCardValidator extends React.Component {
           <input
             name="holder"
             value={this.state.holder}
-            style={inputStyle}
+            style={errors.holder ? inputStyleError : inputStyle}
             placeholder={customTextLabels.holderPlaceholder || 'Card holder name'}
             onChange={this.onChangeHolder}
           />
-          {errors && (
-            <div style={{ color: 'red', fontSize: '12px', padding: '5px' }}>{errors.holder}</div>
-          )}
         </div>
-        <div
-          style={{
-            paddingBottom: '15px',
-            boxSizing: 'border-box',
-          }}
-        >
-          <select
-            name="brand"
-            value={this.state.brand}
-            onChange={this.selectBrand}
-            style={inputStyle}
+        {showCardType && (
+          <div
+            style={{
+              paddingBottom: '15px',
+              boxSizing: 'border-box',
+            }}
           >
-            {renderCardTypes()}
-          </select>
-        </div>
+            <select
+              name="brand"
+              value={this.state.brand}
+              onChange={this.selectBrand}
+              style={inputStyle}
+            >
+              {renderCardTypes()}
+            </select>
+          </div>
+        )}
         <div
           style={{
             width: '50%',
             float: 'left',
-            paddingBottom: '15px',
             boxSizing: 'border-box',
             paddingRight: '15px',
           }}
@@ -299,15 +302,14 @@ class CreditCardValidator extends React.Component {
             onKeyPress={this.onChangeCardNumber}
             onBlur={this.onBlurCardNumber}
           />
-          {errors && (
-            <div style={{ color: 'red', fontSize: '12px', padding: '5px' }}>{errors.cardNumber || errors.expiry_month || errors.cvv}</div>
+          {!_.isEmpty(errors) && (
+            <div style={{ color: 'red', fontSize: '12px', padding: '5px' }}>{errors.holder || errors.cardNumber || errors.expiry_month || errors.cvv}</div>
           )}
         </div>
         <div
           style={{
             width: '15%',
             float: 'left',
-            paddingBottom: '15px',
             boxSizing: 'border-box',
             paddingRight: '15px',
           }}
@@ -326,7 +328,6 @@ class CreditCardValidator extends React.Component {
           style={{
             width: '20%',
             float: 'left',
-            paddingBottom: '15px',
             boxSizing: 'border-box',
             paddingRight: '15px',
           }}
@@ -345,7 +346,6 @@ class CreditCardValidator extends React.Component {
           style={{
             width: '15%',
             float: 'left',
-            paddingBottom: '15px',
             boxSizing: 'border-box',
           }}
         >
@@ -398,4 +398,5 @@ CreditCardValidator.defaultProps = {
     { name: 'Hipercard', value: 'hipercard' },
   ],
   errors: {},
+  showCardType: true,
 }
