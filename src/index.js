@@ -16,7 +16,7 @@ class CreditCardValidator extends React.Component {
       expiry_year: '',
       expiry: '',
       cvv: '',
-      errors: {},
+      errors: this.props.errors,
     };
 
     this.onChangeHolder = this.onChangeHolder.bind(this);
@@ -51,7 +51,6 @@ class CreditCardValidator extends React.Component {
 
   onBlurCardNumber(e) {
     const cardType = payment.fns.cardType(e.target.value) ? payment.fns.cardType(e.target.value) : '';
-    cardType === 'mastercard' ? 'master' : cardType;
     const validCard = payment.fns.validateCardNumber(e.target.value);
     const { errors, brand } = this.state;
     payment.formatCardNumber(document.querySelector('[name=number]'));
@@ -174,7 +173,7 @@ class CreditCardValidator extends React.Component {
 
   onChangeCreditCardValidator() {
     const { state } = this;
-    this.props.onChangeCreditCardValidator({...state});
+    this.props.onChangeCreditCardValidator({ ...state });
   }
 
   render() {
@@ -223,7 +222,7 @@ class CreditCardValidator extends React.Component {
     }
 
     const renderMonths = () => {
-      const rangeMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10' ,'11' ,'12'];
+      const rangeMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       return rangeMonths.map((month) => (<option key={month} value={month}>{month}</option>));
     }
 
@@ -263,6 +262,9 @@ class CreditCardValidator extends React.Component {
             placeholder={customTextLabels.holderPlaceholder || 'Card holder name'}
             onChange={this.onChangeHolder}
           />
+          {errors && (
+            <div style={{ color: 'red', fontSize: '12px', padding: '5px' }}>{errors.holder}</div>
+          )}
         </div>
         <div
           style={{
@@ -380,7 +382,7 @@ CreditCardValidator.propTypes = {
 
 CreditCardValidator.defaultProps = {
   cardTypes: [
-    { name: 'Master Card', value: 'master' },
+    { name: 'Master Card', value: 'mastercard' },
     { name: 'Visa', value: 'visa' },
     { name: 'Visa Debit', value: 'visadebit' },
     { name: 'Visa Electron', value: 'visaelectron' },
@@ -395,4 +397,5 @@ CreditCardValidator.defaultProps = {
     { name: 'Elo', value: 'elo' },
     { name: 'Hipercard', value: 'hipercard' },
   ],
+  errors: {},
 }
