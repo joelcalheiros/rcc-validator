@@ -88,14 +88,6 @@ class CreditCardValidator extends React.Component {
     }
   }
 
-  selectBrand(e) {
-    this.setState({
-      brand: e.target.value,
-    }, () => {
-      this.onChangeCreditCardValidator();
-    });
-  }
-
   onChangeExpiry(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -117,28 +109,9 @@ class CreditCardValidator extends React.Component {
     this.validateCvv(e.target.value);
   }
 
-  validateCvv(cvv) {
-    const cvvValid = payment.fns.validateCardCVC(cvv);
-    const { errors } = this.state;
-
-    if (!cvvValid) {
-      errors.cvv = this.props.customTextLabels.cvvInvalidLabel || 'The security code is invalid';
-      this.setState({
-        errors,
-      }, () => {
-        this.onChangeCreditCardValidator();
-      });
-    } else {
-      const key = 'cvv';
-      delete errors[key];
-
-      this.setState({
-        errors,
-      }, () => {
-        this.onChangeCreditCardValidator();
-      });
-    }
-
+  onChangeCreditCardValidator() {
+    const { state } = this;
+    this.props.onChangeCreditCardValidator({ ...state });
   }
 
   validateExpity(o) {
@@ -172,11 +145,37 @@ class CreditCardValidator extends React.Component {
     if (!/^\d*$/.test(e.key)) {
       e.preventDefault();
     }
-  };
+  }
 
-  onChangeCreditCardValidator() {
-    const { state } = this;
-    this.props.onChangeCreditCardValidator({ ...state });
+  validateCvv(cvv) {
+    const cvvValid = payment.fns.validateCardCVC(cvv);
+    const { errors } = this.state;
+
+    if (!cvvValid) {
+      errors.cvv = this.props.customTextLabels.cvvInvalidLabel || 'The security code is invalid';
+      this.setState({
+        errors,
+      }, () => {
+        this.onChangeCreditCardValidator();
+      });
+    } else {
+      const key = 'cvv';
+      delete errors[key];
+
+      this.setState({
+        errors,
+      }, () => {
+        this.onChangeCreditCardValidator();
+      });
+    }
+  }
+
+  selectBrand(e) {
+    this.setState({
+      brand: e.target.value,
+    }, () => {
+      this.onChangeCreditCardValidator();
+    });
   }
 
   render() {
@@ -207,7 +206,7 @@ class CreditCardValidator extends React.Component {
       padding: '0 10px',
       resize: 'none',
       boxSizing: 'border-box',
-    }
+    };
 
     const inputStyleError = {
       height: '32px',
@@ -223,19 +222,19 @@ class CreditCardValidator extends React.Component {
       padding: '0 10px',
       resize: 'none',
       boxSizing: 'border-box',
-    }
+    };
 
     const renderMonths = () => {
       const rangeMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-      return rangeMonths.map((month) => (<option key={month} value={month}>{month}</option>));
-    }
+      return rangeMonths.map(month => (<option key={month} value={month}>{month}</option>));
+    };
 
     const renderYears = () => {
       const start = new Date().getFullYear();
       const stop = start + 15;
       const rangeYears = _.range([start], stop, 1);
-      return rangeYears.map((year) => (<option key={year} value={year}>{year}</option>));
-    }
+      return rangeYears.map(year => (<option key={year} value={year}>{year}</option>));
+    };
 
     const renderCardTypes = () => {
       const { cardTypes } = this.props;
@@ -247,9 +246,9 @@ class CreditCardValidator extends React.Component {
           search = card.value.includes(brand);
         }
 
-        return (<option key={card.value} value={card.value} disabled={!search}>{card.name}</option>)
+        return (<option key={card.value} value={card.value} disabled={!search}>{card.name}</option>);
       });
-    }
+    };
 
     return (
       <div style={box} className={this.props.boxClassName}>
@@ -319,7 +318,7 @@ class CreditCardValidator extends React.Component {
             style={errors.expiry_month ? inputStyleError : inputStyle}
             onChange={this.onChangeExpiry}
           >
-            <option value=''>{customTextLabels.monthPlaceholder || 'MM'}</option>
+            <option value="">{customTextLabels.monthPlaceholder || 'MM'}</option>
             {renderMonths()}
           </select>
         </div>
@@ -337,7 +336,7 @@ class CreditCardValidator extends React.Component {
             style={errors.expiry_month ? inputStyleError : inputStyle}
             onChange={this.onChangeExpiry}
           >
-            <option value=''>{customTextLabels.yearPlaceholder || 'YYYY'}</option>
+            <option value="">{customTextLabels.yearPlaceholder || 'YYYY'}</option>
             {renderYears()}
           </select>
         </div>
@@ -364,19 +363,21 @@ class CreditCardValidator extends React.Component {
 export default CreditCardValidator;
 
 CreditCardValidator.propTypes = {
-  holder: PropTypes.string,
-  number: PropTypes.string,
-  expiry_month: PropTypes.string,
-  expiry_year: PropTypes.string,
-  cvv: PropTypes.string,
+  errors: PropTypes.shape({}),
   customTextLabels: PropTypes.shape({
+    cardNumberInvalidLabel: PropTypes.string,
     holderPlaceholder: PropTypes.string,
     numberPlaceholder: PropTypes.string,
     cvvPlaceholder: PropTypes.string,
     yearPlaceholder: PropTypes.string,
     monthPlaceholder: PropTypes.string,
+    expiryMonthInvalidLabel: PropTypes.string,
+    cvvInvalidLabel: PropTypes.string,
   }),
   onChangeCreditCardValidator: PropTypes.func.isRequired,
+  showCardType: PropTypes.bool,
+  cardTypes: PropTypes.array,
+  boxClassName: PropTypes.string,
 };
 
 CreditCardValidator.defaultProps = {
@@ -398,4 +399,4 @@ CreditCardValidator.defaultProps = {
   ],
   errors: {},
   showCardType: true,
-}
+};

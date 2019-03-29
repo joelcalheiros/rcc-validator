@@ -11,8 +11,11 @@
     "react": "^16.4.0"
   },
   "scripts": {
+    "test": "jest",
     "start": "webpack --watch",
-    "build": "webpack"
+    "build": "webpack",
+    "test:lint": "eslint ./src --ext .jsx --ext .js",
+    "test:ci": "npm run test:lint && npm run build && npm run test"
   },
   "author": {
     "name": "Joel Calheiros",
@@ -35,13 +38,31 @@
     "react": "^16.4.0",
     "webpack": "^4.12.0"
   },
+  "prepush": {
+    "run": [
+      "test",
+      "test:lint"
+    ],
+    "silent": true
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-eslint": "^8.0.2",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.5.1",
+    "jest": "^21.2.1",
+    "prettier-eslint": "^8.2.2",
     "webpack-cli": "^3.0.4"
   }
 }

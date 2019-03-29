@@ -1,11 +1,13 @@
-var path = require('path');
+const path = require('path');
+
 module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'index.js',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
+  mode: 'production',
   module: {
     rules: [
       {
@@ -15,13 +17,13 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env']
-          }
-        }
-      }
-    ]
+            presets: ['env'],
+          },
+        },
+      },
+    ],
   },
   externals: {
-    'react': 'commonjs react' 
-  }
+    react: 'commonjs react',
+  },
 };
